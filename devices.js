@@ -17,13 +17,18 @@ const defaultDevice = {
     numColors: 2, // number - 2 (1bitBW) or 4 (4gray)
     driver: undefined, // binding
     displayPNG: async function (imgContents, dither) {
-        const args = [imgContents, this.rotated, dither, this.rightToLeft];
+        const args = [
+            imgContents,
+            this.numColors,
+            this.rotated,
+            this.rightToLeft,
+            dither,
+        ];
 
+        const buffer = await image.convertPNG(...args);
         if (this.numColors === 4) {
-            const buffer = await image.convertPNGto4Grey(...args);
             this.driver.display_4GrayDisplay(buffer);
         } else {
-            const buffer = await image.convertPNGto1BitBW(...args);
             this.driver.display(buffer);
         }
     },
